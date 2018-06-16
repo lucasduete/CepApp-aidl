@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         if (aidlInterface == null) {
             Intent intent = new Intent("cepapp_server.AIDL_SERVER");
             intent.setPackage("io.github.lucasduete.cepapp_server");
-            Log.d(TAG, String.valueOf(bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE)));
+            Log.d(TAG, String.valueOf(bindService(intent, serviceConnection, Service.BIND_IMPORTANT)));
         }
 
         final EditText editText = (EditText) findViewById(R.id.editTextCep);

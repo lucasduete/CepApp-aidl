@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "io.github.lucasduete.cepapp.server"
+        applicationId "io.github.lucasduete.cepapp_server"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1

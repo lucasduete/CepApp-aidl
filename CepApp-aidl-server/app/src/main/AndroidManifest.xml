@@ -26,6 +26,7 @@
             android:exported="false"></service>
         <service
             android:name=".MyAidlService"
+            android:process=":remote"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

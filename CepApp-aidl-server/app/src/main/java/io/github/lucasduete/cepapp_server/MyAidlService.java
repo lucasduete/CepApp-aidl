@@ -24,12 +24,6 @@ public class MyAidlService extends Service {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d(TAG, "CRIIIOUU");
-    }
-
-    @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "Chegou no service");
         return myBinder;
@@ -37,7 +31,7 @@ public class MyAidlService extends Service {
 
     private final AidlInterface.Stub myBinder = new AidlInterface.Stub() {
 
-        private String cep;
+        private String cep = null;
 
         private String getCep() {
             return cep;
@@ -50,7 +44,7 @@ public class MyAidlService extends Service {
         @Override
         public String getCep(String cepString) throws RemoteException {
             new Thread(() -> {
-                Log.d("CEPAPP", "Alooooooooo");
+                Log.d("CEPAPP", "Chegou " + cepString);
                 final String stringUrl = String.format(
                         "https://viacep.com.br/ws/%s/json", cepString
                 );
@@ -71,14 +65,12 @@ public class MyAidlService extends Service {
 
                     Log.d(TAG, buffer.toString());
                     try {
-                        JSONObject object = new JSONObject(buffer.toString());
+                        setCep(buffer.toString());
                         Log.d(TAG, "Objeto:");
-                        Log.d(TAG, object.toString());
-
-                        setCep(object.toString());
+                        Log.d(TAG, getCep());
 
                     } catch (Exception ex) {
-                        Log.d(TAG, "Deu pau na conversao de json");
+                        Log.d(TAG, "Deu pau na obtençao de json");
                         Log.d(TAG, ex.toString());
                     }
 
@@ -89,8 +81,10 @@ public class MyAidlService extends Service {
                 }
             }).start();
 
-            Log.d(TAG, "O cep encontado foi:");
-            Log.d(TAG, getCep());
+            while (getCep() == null)
+                Log.d(TAG, "Buscando");
+
+            Log.d(TAG, "O cep encontado foi: " + getCep());
             return getCep();
         }
     };

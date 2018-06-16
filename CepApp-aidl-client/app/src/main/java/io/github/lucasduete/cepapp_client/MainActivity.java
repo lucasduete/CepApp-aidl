@@ -11,6 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
+
+import org.json.JSONObject;
 
 import io.github.lucasduete.cepapp_server.AidlInterface;
 
@@ -56,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
                 if (aidlInterface == null)
                     throw new Exception("AIDL NULL");
                 else
-                    Log.d("TAG", aidlInterface.getCep(editText.getText().toString()));
+                    updateView(editText.getText().toString());
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -67,5 +70,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         unbindService(serviceConnection);
+    }
+
+    private void updateView(String cep) {
+        TextView textView;
+        JSONObject object;
+
+        try {
+            Log.d(TAG, aidlInterface.getCep(cep).toString());
+            object = new JSONObject(aidlInterface.getCep(cep).toString());
+
+            textView = (TextView) findViewById(R.id.editTextLogradouro);
+            textView.setText(object.getString("logradouro"));
+
+            textView = (TextView) findViewById(R.id.editTextComplemento);
+            textView.setText(object.getString("complemento"));
+
+            textView = (TextView) findViewById(R.id.editTextBairro);
+            textView.setText(object.getString("bairro"));
+
+            textView = (TextView) findViewById(R.id.editTextCidade);
+            textView.setText(object.getString("localidade"));
+
+            textView = (TextView) findViewById(R.id.editTextEstado);
+            textView.setText(object.getString("uf"));
+
+        } catch (Exception ex) {
+            Log.d(TAG, "Deu ruim ao preencher");
+            ex.printStackTrace();
+        }
     }
 }
